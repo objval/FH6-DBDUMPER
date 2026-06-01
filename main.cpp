@@ -179,8 +179,8 @@ namespace
 
     ToggleState check_skill_points(HANDLE proc, const game::CDatabase& db)
     {
-        int64_t n = query_int(proc, db, "SELECT count(*) FROM Profile0_Career_Garage WHERE NumSkillPointsEarned < 100");
-        return { n == 0, n > 0 ? std::format("{} below 100", n) : "" };
+        int64_t n = query_int(proc, db, "SELECT count(*) FROM Profile0_Career_Garage WHERE NumSkillPointsEarned < 999999");
+        return { n == 0, n > 0 ? std::format("{} below 999K", n) : "" };
     }
 
     // ============================================================
@@ -315,9 +315,9 @@ namespace
 
     void apply_skill_points(HANDLE proc, const game::CDatabase& db)
     {
-        int64_t n = query_int(proc, db, "SELECT count(*) FROM Profile0_Career_Garage WHERE NumSkillPointsEarned < 100");
-        run_sql(proc, db, "UPDATE Profile0_Career_Garage SET NumSkillPointsEarned = 100 WHERE NumSkillPointsEarned < 100", "");
-        set_status(std::format("Skill Points -- {} cars set to 100", n));
+        int64_t n = query_int(proc, db, "SELECT count(*) FROM Profile0_Career_Garage WHERE NumSkillPointsEarned < 999999");
+        run_sql(proc, db, "UPDATE Profile0_Career_Garage SET NumSkillPointsEarned = 999999 WHERE NumSkillPointsEarned < 999999", "");
+        set_status(std::format("Skill Points -- {} cars boosted to 999K earned", n));
     }
 
     // ============================================================
@@ -712,7 +712,6 @@ namespace
         { 4, "Hidden Cars",    "Unlock all hidden cars",  check_hidden_cars,  apply_hidden_cars,  revert_hidden_cars,  "_backup_HiddenCars" },
         { 5, "Barn Finds",     "Reveal all barn finds",   check_barn_finds,   apply_barn_finds,   nullptr,             nullptr },
         { 6, "New Tags",       "Clear new car tags",      check_clear_new,    apply_clear_new,    nullptr,             nullptr },
-        { 7, "Skill Points",   "Set 100 on all cars",     check_skill_points, apply_skill_points, nullptr,             nullptr },
     };
 
     constexpr int NUM_TOGGLES = sizeof(TOGGLES) / sizeof(TOGGLES[0]);
